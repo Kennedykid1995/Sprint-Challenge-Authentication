@@ -1,0 +1,19 @@
+{
+	"folders": [
+		{
+			"path": "/Users/keithkennedy/Desktop/lambda school /week 13/day 3/front_end"
+		},
+		{
+			"path": "/Users/keithkennedy/Desktop/lambda school /week 13/day 3/auth-ii"
+		},
+		{
+			"path": "/Users/keithkennedy/Desktop/lambda school /week 13/day 3/login_page"
+		},
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"git.ignoreLimitWarning": true
+	}
+}
