@@ -10,14 +10,13 @@ module.exports = server => {
   server.post('/api/login', login);
   server.get('/api/jokes', authenticate, getJokes);
 };
-function generateToken(id) {
+function generateToken(username) {
   const payload = {
-    id,
+    username,
   };
   const options = {
     expiresIn: '1h',
     jwtid: '12345',
-    subject: `${id}`,
   };
   return jwt.sign(payload, jwtKey, options);
 }
@@ -35,7 +34,7 @@ function register(req, res) {
         .where({id})
         .first()
         .then(user=>{
-          const token = generateToken(user); 
+          const token = generateToken(creds.username); 
           res.status(201).json({id: user.id, token}); 
         })
         .catch(err => res.status(500).send(err));
