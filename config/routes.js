@@ -10,9 +10,9 @@ module.exports = server => {
   server.post('/api/login', login);
   server.get('/api/jokes', authenticate, getJokes);
 };
-function generateToken(username) {
+function generateToken(user) {
   const payload = {
-    username,
+    username: user.username,
   };
   const options = {
     expiresIn: '1h',
@@ -22,29 +22,23 @@ function generateToken(username) {
 }
 
 function register(req, res) {
-  // implement user registration
-  const creds = req.body; 
-  const hash = bcrypt.hashSync(creds.password, 10); 
-  creds.password = hash; 
-  db("users")
-    .insert(creds)
-    .then(ids => {
-      const id = ids[0]; 
-      db("users")
-        .where({id})
-        .first()
-        .then(user=>{
-          const token = generateToken(creds.username); 
-          res.status(201).json({id: user.id, token}); 
-        })
-        .catch(err => res.status(500).send(err));
-    })
-    .catch(err => res.status(500).send(err)); 
+  let creds = req.body;
+  if (!(creds.username && creds.password)) return res.json({ code: 400 });
+ 
+   const hash = bcrypt.hashSync(creds.password, 10);
+   creds.password = hash;
+ 
+   db('users')
+     .insert(creds)
+     .then(response => {
+       if (response) return res.status(200).send(response);
+     })
+     .catch(err => res.status(500).send(err));
 }
 
 function login(req, res) {
-  // implement user login
-  const creds = req.body; 
+
+  let creds = req.body; 
 
   db("users")
     .where({username: creds.username})
